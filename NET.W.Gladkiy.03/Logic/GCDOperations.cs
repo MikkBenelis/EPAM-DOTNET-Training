@@ -1,14 +1,6 @@
-﻿// Разработать класс, позволяющий выполнять вычисления НОД по 
-// алгоритму Евклида для двух, трех и т.д.целых чисел. 
-// Методы класса помимо вычисления НОД должны определять значение 
-// времени, необходимое для выполнения расчета. Добавить к 
-// разработанному классу методы, реализующие алгоритм Стейна 
-// (бинарный алгоритм Евклида) для расчета НОД двух, трех и 
-// т.д. целых чисел. Методы должны также  определять значение 
-// времени, необходимое для выполнения расчетов.
-
-namespace Logic.MathOperations
+﻿namespace Logic.MathOperations
 {
+    using System;
     using System.Diagnostics;
 
     /// <summary>
@@ -22,11 +14,20 @@ namespace Logic.MathOperations
         /// <param name="execTime">long reference to execution time result</param>
         /// <param name="nums">int array to find GCD</param>
         /// <returns>greatest common divisor of given numbers</returns>
-        public static int EuclideanR(out long execTime, params int[] nums)
+        public static int EuclideanRecursive(out long execTime, params int[] nums)
         {
+            if (nums == null || nums.Length < 2)
+            {
+                throw new ArgumentException();
+            }
+
             var watch = Stopwatch.StartNew();
 
-            int result = 0;
+            int result = nums[0];
+            for (int i = 1; i < nums.Length; i++)
+            {
+                result = EuclideanR(result, nums[i]);
+            }
             
             watch.Stop();
             execTime = watch.ElapsedMilliseconds;
@@ -37,12 +38,20 @@ namespace Logic.MathOperations
         /// <param name="execTime">long reference to execution time result</param>
         /// <param name="nums">int array to find GCD</param>
         /// <returns>Greatest common divisor of given numbers</returns>
-        public static int EuclideanI(out long execTime, params int[] nums)
+        public static int EuclideanIterative(out long execTime, params int[] nums)
         {
-            var watch = Stopwatch.StartNew();
+            if (nums == null || nums.Length < 2)
+            {
+                throw new ArgumentException();
+            }
 
-            /// TODO
-            int result = 0;
+            var watch = Stopwatch.StartNew();
+            
+            int result = nums[0];
+            for (int i = 1; i < nums.Length; i++)
+            {
+                result = EuclideanI(result, nums[i]);
+            }
 
             watch.Stop();
             execTime = watch.ElapsedMilliseconds;
@@ -55,10 +64,18 @@ namespace Logic.MathOperations
         /// <returns>Greatest common divisor of given numbers</returns>
         public static int Stein(out long execTime, params int[] nums)
         {
-            var watch = Stopwatch.StartNew();
+            if (nums == null || nums.Length < 2)
+            {
+                throw new ArgumentException();
+            }
 
-            /// TODO
-            int result = 0;
+            var watch = Stopwatch.StartNew();
+            
+            int result = nums[0];
+            for (int i = 1; i < nums.Length; i++)
+            {
+                result = SteinLogic(result, nums[i]);
+            }
 
             watch.Stop();
             execTime = watch.ElapsedMilliseconds;
@@ -70,7 +87,7 @@ namespace Logic.MathOperations
         #region PrivateEuclideanAPI
 
         // Recursive varian of Euclidean algorithm
-        private static int EuclideanRecursive(int a, int b)
+        private static int EuclideanR(int a, int b)
         {
             if (a == 0)
             {
@@ -84,16 +101,16 @@ namespace Logic.MathOperations
 
             if (a > b)
             {
-                return EuclideanRecursive(a % b, b);
+                return EuclideanR(a % b, b);
             }
             else
             {
-                return EuclideanRecursive(a, b % a);
+                return EuclideanR(a, b % a);
             }
         }
 
         // Iterative varian of Euclidean algorithm
-        private static int EuclideanIterative(int a, int b)
+        private static int EuclideanI(int a, int b)
         {
             while (a != 0 && b != 0)
             {
@@ -118,5 +135,57 @@ namespace Logic.MathOperations
         }
 
         #endregion PrivateEuclideanAPI
+
+        #region PrivateSteinAPI
+
+        private static int SteinLogic(int a, int b)
+        {
+            if (a == 0)
+            {
+                return b;
+            }
+
+            if (b == 0)
+            {
+                return a;
+            }
+
+            if (a == b)
+            {
+                return a;
+            }
+
+            if ((a & 1) == 0 && (b & 1) == 0)
+            {
+                return SteinLogic(a >> 1, b >> 1) << 1;
+            }
+            else
+            {
+                if ((a & 1) == 0 && (b & 1) != 0)
+                {
+                    return SteinLogic(a >> 1, b);
+                }
+                else
+                {
+                    if ((b & 1) == 0)
+                    {
+                        return SteinLogic(a, b >> 1);
+                    }
+                    else
+                    {
+                        if (a > b)
+                        {
+                            return SteinLogic((a - b) >> 1, b);
+                        }
+                        else
+                        {
+                            return SteinLogic(a, (b - a) >> 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion PrivateSteinAPI
     }
 }
