@@ -13,7 +13,7 @@
         /// <summary>Converts double to bit string</summary>
         /// <param name="number">double value to convert</param>
         /// <returns>string result of double bit representation</returns>
-        public static string DoubleToBinaryString(double number)
+        public static string DoubleToBinaryString(this double number)
         {
             StringBuilder result = new StringBuilder();
             long intBits = BitConverter.DoubleToInt64Bits(number);
