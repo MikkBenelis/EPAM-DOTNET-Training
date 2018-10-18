@@ -1,5 +1,7 @@
 ﻿namespace NUnitTests
 {
+    using Logic.Converters;
+    using Logic.MathOperations;
     using NUnit.Framework;
 
     [TestFixture]
@@ -9,27 +11,30 @@
         [TestCase(37, 600, ExpectedResult = 1)]
         [TestCase(20, 100, ExpectedResult = 20)]
         [TestCase(624129, 2061517, ExpectedResult = 18913)]
-        public int TestGCDEuclideanR(int[] nums)
+        [TestCase(125, 25, 45, ExpectedResult = 5)]
+        public int TestGCDEuclideanR(params int[] nums)
         {
-            return Logic.MathOperations.GCDOperations.EuclideanR(out _, nums);
+            return GCDOperations.EuclideanRecursive(out _, nums);
         }
 
         [TestCase(13, 13, ExpectedResult = 13)]
         [TestCase(37, 600, ExpectedResult = 1)]
         [TestCase(20, 100, ExpectedResult = 20)]
         [TestCase(624129, 2061517, ExpectedResult = 18913)]
-        public int TestGCDEuclideanI(int[] nums)
+        [TestCase(125, 25, 45, ExpectedResult = 5)]
+        public int TestGCDEuclideanI(params int[] nums)
         {
-            return Logic.MathOperations.GCDOperations.EuclideanI(out _, nums);
+            return GCDOperations.EuclideanIterative(out _, nums);
         }
 
         [TestCase(13, 13, ExpectedResult = 13)]
         [TestCase(37, 600, ExpectedResult = 1)]
         [TestCase(20, 100, ExpectedResult = 20)]
         [TestCase(624129, 2061517, ExpectedResult = 18913)]
-        public int TestGCDStein(int[] nums)
+        [TestCase(125, 25, 45, ExpectedResult = 5)]
+        public int TestGCDStein(params int[] nums)
         {
-            return Logic.MathOperations.GCDOperations.Stein(out _, nums);
+            return GCDOperations.Stein(out _, nums);
         }
 
         [TestCase(0.0, ExpectedResult = "0000000000000000000000000000000000000000000000000000000000000000")]
@@ -45,7 +50,7 @@
         [TestCase(double.PositiveInfinity, ExpectedResult = "0111111111110000000000000000000000000000000000000000000000000000")]
         public string TestDoubleToBinatyString(double number)
         {
-            return Logic.Converters.BinaryConverter.DoubleToBinaryString(number);
+            return number.DoubleToBinaryString();
         }
     }
 }
