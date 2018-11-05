@@ -1,13 +1,20 @@
 ﻿namespace Logic.Math
 {
     using System;
+    using System.Collections;
 
     public static class Sorting
     {
+        #region Delegates
+
+        public delegate int ComparerDelegate(int[] arr1, int[] arr2);
+
+        #endregion Delegates
+
         #region PublicAPI
 
-        // SortBySum
-        public static int[][] SortBySum(int[][] array, bool reverse = false)
+        // Sort with given comparer
+        public static int[][] Sort(int[][] array, IComparer comparer, bool reverse = false)
         {
             if (array == null)
             {
@@ -19,16 +26,16 @@
             {
                 for (int j = i + 1; j < array.Length; j++)
                 {
-                    if (reverse)
+                    if (!reverse)
                     {
-                        if (GetArraySum(result[i]) < GetArraySum(result[j]))
+                        if (comparer.Compare(result[i], result[j]) > 0)
                         {
                             SwapIntArrs(ref result[i], ref result[j]);
                         }
                     }
                     else
                     {
-                        if (GetArraySum(result[i]) > GetArraySum(result[j]))
+                        if (comparer.Compare(result[i], result[j]) < 0)
                         {
                             SwapIntArrs(ref result[i], ref result[j]);
                         }
@@ -39,34 +46,45 @@
             return result;
         }
 
-        // SortByMinElements
-        public static int[][] SortByMinElements(int[][] array, bool reverse = false)
+        // Sort with giver comparer degegate
+        public static int[][] Sort(int[][] array, ComparerDelegate comparerDelegate, bool reverse = false)
         {
             if (array == null)
             {
                 throw new ArgumentException();
             }
 
-            return new int[0][];
-        }
-
-        // SortByMaxElements
-        public static int[][] SortByMaxElements(int[][] array, bool reverse = false)
-        {
-            if (array == null)
+            int[][] result = (int[][])array.Clone();
+            for (int i = 0; i < array.Length; i++)
             {
-                throw new ArgumentException();
+                for (int j = i + 1; j < array.Length; j++)
+                {
+                    if (!reverse)
+                    {
+                        if (comparerDelegate(result[i], result[j]) > 0)
+                        {
+                            SwapIntArrs(ref result[i], ref result[j]);
+                        }
+                    }
+                    else
+                    {
+                        if (comparerDelegate(result[i], result[j]) < 0)
+                        {
+                            SwapIntArrs(ref result[i], ref result[j]);
+                        }
+                    }
+                }
             }
 
-            return new int[0][];
+            return result;
         }
 
         #endregion PublicAPI
 
-        #region PrivateAPI
+        #region InternalAPI
 
         // SwapIntArrs
-        private static void SwapIntArrs(ref int[] arr1, ref int[] arr2)
+        public static void SwapIntArrs(ref int[] arr1, ref int[] arr2)
         {
             int[] temp = arr1;
             arr1 = arr2;
@@ -74,7 +92,7 @@
         }
 
         // GetArraySum
-        private static int GetArraySum(int[] array)
+        public static int GetArraySum(int[] array)
         {
             int result = 0;
             foreach (int element in array)
@@ -86,7 +104,7 @@
         }
 
         // GetMinElement
-        private static int GetMinElement(int[] array)
+        public static int GetMinElement(int[] array)
         {
             int min = array[0];
             foreach (int element in array)
@@ -101,7 +119,7 @@
         }
 
         // GetMaxElemeny
-        private static int GetMaxElement(int[] array)
+        public static int GetMaxElement(int[] array)
         {
             int max = array[0];
             foreach (int element in array)
@@ -115,6 +133,6 @@
             return max;
         }
 
-        #endregion PrivateAPI
+        #endregion InternalAPI
     }
 }

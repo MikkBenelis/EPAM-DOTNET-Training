@@ -7,172 +7,94 @@
     [TestFixture]
     public class NUnitTestsSorting
     {
+        // Compare two two-dimensional arrays for equality
+        public static bool CompareArrays(int[][] arr1, int[][] arr2)
+        {
+            bool result = true;
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                result &= arr1[i].SequenceEqual(arr2[i]);
+            }
+
+            return result;
+        }
+
         [TestCase]
         public void TestSortingBySum()
         {
-            int[][] arrToSort =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
+            int[][] tempArray;
+            int[][] arrToSort = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
+            int[][] sortedArr = { new int[] { 1, 2, 3 }, new int[] { 5, 10 }, new int[] { 15 } };
 
-            int[][] sortedArr =
-            {
-                new int[] { 1, 2, 3 },
-                new int[] { 5, 10 },
-                new int[] { 15 }
-            };
-
-            arrToSort = Sorting.SortBySum(arrToSort);
-
-            bool result = true;
-            for (int i = 0; i < arrToSort.Length; i++)
-            {
-                result &= arrToSort[i].SequenceEqual(sortedArr[i]);
-            }
-
-            Assert.IsTrue(result);
+            tempArray = Sorting.Sort(arrToSort, new SumComparator());
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
+            tempArray = Sorting.Sort(arrToSort, new SumComparator().Compare);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
         }
 
         [TestCase]
         public void TestSortingBySumReversed()
         {
-            int[][] arrToSort =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
+            int[][] tempArray;
+            int[][] arrToSort = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
+            int[][] sortedArr = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
 
-            int[][] sortedArr =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
-
-            arrToSort = Sorting.SortBySum(arrToSort, reverse: true);
-
-            bool result = true;
-            for (int i = 0; i < arrToSort.Length; i++)
-            {
-                result &= arrToSort[i].SequenceEqual(sortedArr[i]);
-            }
-
-            Assert.IsTrue(result);
+            tempArray = Sorting.Sort(arrToSort, new SumComparator(), reverse: true);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
+            tempArray = Sorting.Sort(arrToSort, new SumComparator().Compare, reverse: true);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
         }
 
         [TestCase]
         public void TestSortingByMinElements()
         {
-            int[][] arrToSort =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
+            int[][] tempArray;
+            int[][] arrToSort = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
+            int[][] sortedArr = { new int[] { 1, 2, 3 }, new int[] { 5, 10 }, new int[] { 15 } };
 
-            int[][] sortedArr =
-            {
-                new int[] { 1, 2, 3 },
-                new int[] { 5, 10 },
-                new int[] { 15 }
-            };
-
-            arrToSort = Sorting.SortByMinElements(arrToSort);
-
-            bool result = true;
-            for (int i = 0; i < arrToSort.Length; i++)
-            {
-                result &= arrToSort[i].SequenceEqual(sortedArr[i]);
-            }
-
-            Assert.IsTrue(result);
+            tempArray = Sorting.Sort(arrToSort, new MinElementComparator());
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
+            tempArray = Sorting.Sort(arrToSort, new MinElementComparator().Compare);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
         }
 
         [TestCase]
         public void TestSortingByMinElementsReversed()
         {
-            int[][] arrToSort =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
+            int[][] tempArray;
+            int[][] arrToSort = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
+            int[][] sortedArr = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
 
-            int[][] sortedArr =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
-
-            arrToSort = Sorting.SortByMinElements(arrToSort, reverse: true);
-
-            bool result = true;
-            for (int i = 0; i < arrToSort.Length; i++)
-            {
-                result &= arrToSort[i].SequenceEqual(sortedArr[i]);
-            }
-
-            Assert.IsTrue(result);
+            tempArray = Sorting.Sort(arrToSort, new MinElementComparator(), reverse: true);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
+            tempArray = Sorting.Sort(arrToSort, new MinElementComparator().Compare, reverse: true);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
         }
 
         [TestCase]
         public void TestSortingByMaxElements()
         {
-            int[][] arrToSort =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
+            int[][] tempArray;
+            int[][] arrToSort = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
+            int[][] sortedArr = { new int[] { 1, 2, 3 }, new int[] { 5, 10 }, new int[] { 15 } };
 
-            int[][] sortedArr =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
-
-            arrToSort = Sorting.SortByMaxElements(arrToSort);
-
-            bool result = true;
-            for (int i = 0; i < arrToSort.Length; i++)
-            {
-                result &= arrToSort[i].SequenceEqual(sortedArr[i]);
-            }
-
-            Assert.IsTrue(result);
+            tempArray = Sorting.Sort(arrToSort, new MaxElementComparator());
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
+            tempArray = Sorting.Sort(arrToSort, new MaxElementComparator().Compare);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
         }
 
         [TestCase]
         public void TestSortingByMaxElementsReversed()
         {
-            int[][] arrToSort =
-            {
-                new int[] { 15 },
-                new int[] { 5, 10 },
-                new int[] { 1, 2, 3 }
-            };
+            int[][] tempArray;
+            int[][] arrToSort = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
+            int[][] sortedArr = { new int[] { 15 }, new int[] { 5, 10 }, new int[] { 1, 2, 3 } };
 
-            int[][] sortedArr =
-            {
-                new int[] { 1, 2, 3 },
-                new int[] { 5, 10 },
-                new int[] { 15 }
-            };
-
-            arrToSort = Sorting.SortByMaxElements(arrToSort, reverse: true);
-
-            bool result = true;
-            for (int i = 0; i < arrToSort.Length; i++)
-            {
-                result &= arrToSort[i].SequenceEqual(sortedArr[i]);
-            }
-
-            Assert.IsTrue(result);
+            tempArray = Sorting.Sort(arrToSort, new MaxElementComparator(), reverse: true);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
+            tempArray = Sorting.Sort(arrToSort, new MaxElementComparator().Compare, reverse: true);
+            Assert.IsTrue(CompareArrays(tempArray, sortedArr));
         }
     }
 }
