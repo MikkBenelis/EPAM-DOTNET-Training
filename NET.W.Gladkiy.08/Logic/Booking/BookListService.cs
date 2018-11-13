@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using NLog;
 
     public static class BookListService
     {
@@ -19,10 +20,13 @@
         {
             if (book == null || bls.Library.Contains(book))
             {
+                LogManager.GetCurrentClassLogger().Fatal("Can't add book (book is null or already in library)!");
                 throw new ArgumentException();
             }
 
             bls.Library.Add(book);
+
+            LogManager.GetCurrentClassLogger().Info($"Book \"{book:S}\" was added!");
         }
 
         /// <summary>Remove book from storage</summary>
@@ -32,6 +36,7 @@
         {
             if (isbn == null)
             {
+                LogManager.GetCurrentClassLogger().Fatal("Can't remove book (book's isbn is null)!");
                 throw new ArgumentException();
             }
 
@@ -42,12 +47,14 @@
                 {
                     wasRemoved = true;
                     bls.Library.Remove(book);
+                    LogManager.GetCurrentClassLogger().Info($"Book \"{book:S}\" was removed!");
                     break;
                 }
             }
 
             if (!wasRemoved)
             {
+                LogManager.GetCurrentClassLogger().Fatal("Can't remove book (book wasn't found in library)!");
                 throw new ArgumentException();
             }
         }
@@ -129,8 +136,8 @@
         /// <param name="tag">tag to sort</param>
         public static void SortBooksByTag(this BookListStorage bls, TAG tag)
         {
-            // TODO
             bls.Library.Sort(new BookTagComparer(tag));
+            LogManager.GetCurrentClassLogger().Info($"Library was sorted!");
         }
 
         /// <summary>Print library to stream</summary>
@@ -145,7 +152,7 @@
 
             foreach (Book book in bls.Library)
             {
-                tw.WriteLine(book);
+                tw.WriteLine(book.ToString());
             }
         }
     }
