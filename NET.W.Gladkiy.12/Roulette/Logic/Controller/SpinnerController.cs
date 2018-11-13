@@ -10,47 +10,51 @@
     public class SpinnerController
     {
         #region Fields
-        
+
+        // Spinner image
         private Image _spinnerImage;
 
         #endregion Fields
 
         #region Constructors
 
-        /// <summary>Creates empty spinner object</summary>
-        /// <returns>Created spinner object</returns>
-        public SpinnerController()
-        {
-            Spinner = new Spinner();
-            IsSpinning = false;
-        }
-
         /// <summary>Creates spinner object with image</summary>
         /// <param name="spinnerImage">Image of spinner</param>
         /// <returns>Created spinner object</returns>
-        public SpinnerController(Image spinnerImage) : this()
+        public SpinnerController(Image spinnerImage)
         {
-            SetSpinnerImage(spinnerImage);
+            if (spinnerImage == null)
+            {
+                throw new ArgumentException();
+            }
+
+            _spinnerImage = spinnerImage;
+            Spinner = new Spinner();
+            IsSpinning = false;
         }
 
         #endregion Constructors
 
         #region Properties
 
+        // Spinner object
         public Spinner Spinner { get; private set; }
 
+        // Spinning state
         public bool IsSpinning { get; private set; }
+
+        // Spinning animation time
+        private static double SPINNING_TIME { get => 5; }
+
+        // Min spinning rounds
+        private static int MIN_ROUNDS { get => 1; }
+
+        // Max spinning rounds
+        private static int MAX_ROUNDS { get => 3; }
 
         #endregion Properties
 
         #region PublicAPI
-
-        /// <summary>Sets spinner image</summary>
-        /// <param name="spinnerImage">Image of spinner</param>
-        public void SetSpinnerImage(Image spinnerImage)
-        {
-            _spinnerImage = spinnerImage ?? throw new ArgumentException();
-        }
 
         /// <summary>Spins spinner</summary>
         public void SpinSpinner(Label resultLabel, Action callback)
@@ -66,19 +70,22 @@
                 rotateTransform = new RotateTransform();
             }
 
-            TimeSpan animationTime = TimeSpan.FromSeconds(5);
-            int minAngle = (int)rotateTransform.Angle + 360;
-            int maxAngle = (int)rotateTransform.Angle + 360 + (360 * 3);
+            TimeSpan animationTime = TimeSpan.FromSeconds(SPINNING_TIME);
+            double minAngle = rotateTransform.Angle + (360 * MIN_ROUNDS);
+            double maxAngle = rotateTransform.Angle + minAngle + (360 * MAX_ROUNDS);
+            double toAngle = (new Random().NextDouble() * (maxAngle - minAngle)) + minAngle;
+
             var animation = new DoubleAnimation()
             {
                 AccelerationRatio = 0.05,
                 DecelerationRatio = 0.95,
                 Duration = new Duration(animationTime),
-                To = new Random().Next(minAngle, maxAngle)
+                To = toAngle
             };
 
             _spinnerImage.RenderTransform = rotateTransform;
-            animation.Completed += (sender, e) => {
+            animation.Completed += (sender, e) => 
+            {
                 int number = (int)Math.Round(((int)animation.To % 360) * Spinner.Numbers.Length / 360.0);
                 resultLabel.Content = Spinner.Numbers[number % Spinner.Numbers.Length].Value;
                 Spinner.Spin(Spinner.Numbers[number % Spinner.Numbers.Length]);

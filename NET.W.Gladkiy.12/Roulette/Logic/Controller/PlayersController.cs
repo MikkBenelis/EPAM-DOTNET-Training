@@ -61,6 +61,7 @@
         /// <summary>Clears players list</summary>
         public void ClearPlayersList()
         {
+            _spinnerController.Spinner.ClearEventListeners();
             PlayersList.Clear();
         }
 
@@ -73,9 +74,12 @@
             {
                 throw new ArgumentException();
             }
-            
-            PlayersList[playerIndex].SetState(state);
-            RefreshPlayersList();
+   
+            if (PlayersList[playerIndex].Cash >= Player.MIN_CASH)
+            {
+                PlayersList[playerIndex].SetState(state);
+                RefreshPlayersList();
+            }
         }
 
         /// <summary>Refresh players list</summary>

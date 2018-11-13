@@ -44,6 +44,9 @@
 
         #region Properties
 
+        // Minimum player cash
+        public static int MIN_CASH { get => -100; }
+
         // Player name
         public string Name { get; private set; }
 
@@ -57,7 +60,7 @@
 
         #region PublicAPI
 
-        /// <summary>Add cash from account</summary>
+        /// <summary>Add cash to account</summary>
         /// <param name="amount">Amount to add</param>
         public void AddCash(int amount)
         {
@@ -81,7 +84,7 @@
             Cash -= amount;
         }
 
-        /// <summary>Sets player state</summary>
+        /// <summary>Set player state</summary>
         /// <param name="state">State to set</param>
         public void SetState(STATE state)
         {
@@ -91,7 +94,7 @@
         /// <summary>Black color event handler</summary>
         /// <param name="sender">Sender of event</param>
         /// <param name="e">Event arguments</param>
-        public void BlackColorEventHandler(object sender, SpinEventArgs e)
+        public void BlackColorEventHandler(object sender, SpinnerEventArgs e)
         {
             if (State == STATE.BLACK)
             {
@@ -103,7 +106,7 @@
         /// <summary>Red color event handler</summary>
         /// <param name="sender">Sender of event</param>
         /// <param name="e">Event arguments</param>
-        public void RedColorEventHandler(object sender, SpinEventArgs e)
+        public void RedColorEventHandler(object sender, SpinnerEventArgs e)
         {
             if (State == STATE.RED)
             {
@@ -115,19 +118,19 @@
         /// <summary>Green color event handler</summary>
         /// <param name="sender">Sender of event</param>
         /// <param name="e">Event arguments</param>
-        public void GreenColorEventHandler(object sender, SpinEventArgs e)
+        public void GreenColorEventHandler(object sender, SpinnerEventArgs e)
         {
             if (State == STATE.GREEN)
             {
                 receivedEvent = true;
-                AddCash(35);
+                AddCash(50);
             }
         }
 
         /// <summary>Event number event handler</summary>
         /// <param name="sender">Sender of event</param>
         /// <param name="e">Event arguments</param>
-        public void EvenNumberEventHandler(object sender, SpinEventArgs e)
+        public void EvenNumberEventHandler(object sender, SpinnerEventArgs e)
         {
             if (State == STATE.EVEN)
             {
@@ -139,7 +142,7 @@
         /// <summary>Odd number event handler</summary>
         /// <param name="sender">Sender of event</param>
         /// <param name="e">Event arguments</param>
-        public void OddNumberEventHandler(object sender, SpinEventArgs e)
+        public void OddNumberEventHandler(object sender, SpinnerEventArgs e)
         {
             if (State == STATE.ODD)
             {
@@ -150,18 +153,22 @@
 
         /// <summary>End of spinning event</summary>
         /// <param name="sender">Sender of event</param>
-        /// <param name="e">Spin event arguments</param>
-        public void SpinEventHandler(object sender, SpinEventArgs e)
+        /// <param name="e">Event arguments</param>
+        public void SpinEventHandler(object sender, SpinnerEventArgs e)
         {
             if (!(State == Player.STATE.NOTINGAME))
             {
                 if (!receivedEvent)
                 {
                     TakeCash(15);
+                    if (Cash < MIN_CASH)
+                    {
+                        SetState(STATE.NOTINGAME);
+                    }
                 }
-            }
 
-            receivedEvent = false;
+                receivedEvent = false;
+            }
         }
 
         /// <summary>ToString</summary>
