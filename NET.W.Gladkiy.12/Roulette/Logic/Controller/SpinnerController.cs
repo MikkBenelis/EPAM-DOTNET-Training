@@ -47,10 +47,10 @@
         private static double SPINNING_TIME { get => 5; }
 
         // Min spinning rounds
-        private static int MIN_ROUNDS { get => 1; }
+        private static double MIN_ROUNDS { get => 1; }
 
         // Max spinning rounds
-        private static int MAX_ROUNDS { get => 3; }
+        private static double MAX_ROUNDS { get => 3; }
 
         #endregion Properties
 
@@ -71,22 +71,24 @@
             }
 
             TimeSpan animationTime = TimeSpan.FromSeconds(SPINNING_TIME);
-            double minAngle = rotateTransform.Angle + (360 * MIN_ROUNDS);
-            double maxAngle = rotateTransform.Angle + minAngle + (360 * MAX_ROUNDS);
-            double toAngle = (new Random().NextDouble() * (maxAngle - minAngle)) + minAngle;
+            double minAngle = 360 * MIN_ROUNDS;
+            double maxAngle = 360 * MAX_ROUNDS;
+            double multiplier = new Random().NextDouble();
+            double toAngle = (multiplier * (maxAngle - minAngle)) + minAngle;
 
             var animation = new DoubleAnimation()
             {
                 AccelerationRatio = 0.05,
                 DecelerationRatio = 0.95,
                 Duration = new Duration(animationTime),
-                To = toAngle
+                To = rotateTransform.Angle + toAngle
             };
 
             _spinnerImage.RenderTransform = rotateTransform;
             animation.Completed += (sender, e) => 
             {
-                int number = (int)Math.Round(((int)animation.To % 360) * Spinner.Numbers.Length / 360.0);
+                _spinnerImage.RenderTransform = new RotateTransform((double)animation.To % 360);
+                int number = (int)Math.Round(((double)animation.To % 360) * Spinner.Numbers.Length / 360.0);
                 resultLabel.Content = Spinner.Numbers[number % Spinner.Numbers.Length].Value;
                 Spinner.Spin(Spinner.Numbers[number % Spinner.Numbers.Length]);
                 callback.Invoke();
