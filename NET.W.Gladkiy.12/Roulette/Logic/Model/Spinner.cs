@@ -1,6 +1,5 @@
 ﻿namespace Roulette.Model
 {
-    using System;
     using System.Text;
     using NLog;
 
