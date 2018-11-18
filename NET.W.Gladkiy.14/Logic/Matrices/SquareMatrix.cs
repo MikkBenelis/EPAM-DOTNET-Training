@@ -4,8 +4,7 @@
 
     public class SquareMatrix<T> : IEquatable<SquareMatrix<T>>
     {
-        public delegate void ItemChanged(object sender, MatrixChangedEventArgs<T> args);
-        public event ItemChanged ItemChangedEvent;
+        #region Constructors
 
         /// <summary>Create empty sqare matrix</summary>
         /// <param name="size">Square matrix size</param>
@@ -27,11 +26,27 @@
             }
         }
 
+        #endregion Constructors
+
+        #region Delegates
+
+        public delegate void ItemChanged(object sender, MatrixChangedEventArgs<T> args);
+
+        public event ItemChanged ItemChangedEvent;
+
+        #endregion Delegates
+
+        #region Properties
+
         // Matrix size
         public int Size { get; private set; }
 
         // Matrix values
         public T[,] Matrix { get; private set; }
+
+        #endregion Properties
+
+        #region PublicAPI
 
         /// <summary>Set new square matrix elements</summary>
         /// <param name="elements">New matrix elements</param>
@@ -73,7 +88,7 @@
         /// <returns>State of equality result</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as SquareMatrix<T>);
+            return this.Equals(obj as SquareMatrix<T>);
         }
 
         /// <summary>Equals</summary>
@@ -105,9 +120,11 @@
         public override int GetHashCode()
         {
             var hashCode = 31;
-            hashCode = hashCode * 31 + Size.GetHashCode();
-            hashCode = hashCode * 31 + Matrix.GetHashCode();
+            hashCode = (hashCode * 31) + Size.GetHashCode();
+            hashCode = (hashCode * 31) + Matrix.GetHashCode();
             return hashCode;
         }
+
+        #endregion PublicAPI
     }
 }
