@@ -12,7 +12,7 @@ namespace DependencyResolver
         public static void ConfigureResolver(this IKernel kernel)
         {
             kernel.Bind<IAccountService>().To<AccountService>();
-            kernel.Bind<IAccountRepository>().To<FakeAccountRepository>();
+            kernel.Bind<IAccountRepository>().To<MSSQLLocalAccountRepository>();
         }
     }
 }
