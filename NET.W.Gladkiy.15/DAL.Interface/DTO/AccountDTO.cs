@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DAL.Interface.DTO
 {
     public class AccountDTO : IEquatable<AccountDTO>
     {
+        [Key]
         public int AccountID { get; set; }
 
         public decimal Balance { get; set; }
