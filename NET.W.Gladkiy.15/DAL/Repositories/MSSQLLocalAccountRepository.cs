@@ -1,15 +1,11 @@
 ﻿namespace DAL.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using DAL.Interface.DTO;
     using DAL.Interface.Interfaces;
-    
-    public class AccountsContext : DbContext
-    {
-        public DbSet<AccountDTO> Accounts { get; set; }
-    }
     
     public class MSSQLLocalAccountRepository : IAccountRepository
     {
@@ -46,11 +42,18 @@
         {
             using (var context = new AccountsContext())
             {
-                var account = (from a in context.Accounts
-                               where a.AccountID == accountID
-                               select a).Single();
-                context.Accounts.Remove(account);
-                context.SaveChanges();
+                try
+                {
+                    var account = (from a in context.Accounts
+                                   where a.AccountID == accountID
+                                   select a).Single();
+                    context.Accounts.Remove(account);
+                    context.SaveChanges();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Ignore
+                }
             }
         }
 
@@ -58,11 +61,18 @@
         {
             using (var context = new AccountsContext())
             {
-                var account = (from a in context.Accounts
-                               where a.AccountID == accountID
-                               select a).Single();
-                account.Balance += amount;
-                context.SaveChanges();
+                try
+                {
+                    var account = (from a in context.Accounts
+                                   where a.AccountID == accountID
+                                   select a).Single();
+                    account.Balance += amount;
+                    context.SaveChanges();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Ignore
+                }
             }
         }
 
@@ -70,12 +80,24 @@
         {
             using (var context = new AccountsContext())
             {
-                var account = (from a in context.Accounts
-                               where a.AccountID == accountID
-                               select a).Single();
-                account.Balance -= amount;
-                context.SaveChanges();
+                try
+                {
+                    var account = (from a in context.Accounts
+                                   where a.AccountID == accountID
+                                   select a).Single();
+                    account.Balance -= amount;
+                    context.SaveChanges();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Ignore
+                }
             }
+        }
+
+        public class AccountsContext : DbContext
+        {
+            public DbSet<AccountDTO> Accounts { get; set; }
         }
     }
 }
