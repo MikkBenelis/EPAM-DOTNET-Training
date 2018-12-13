@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Login page";
+}
+
+<div class="row text-center">
+    <div class="col">
+        <h1 class="page-heading">@ViewBag.Title</h1>
+    </div>
+    <div class="col">
+        <form method="post" action="@Url.Action("Login")">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" placeholder="Enter login" name="Login">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password" name="Password">
+                <small class="form-text text-muted">Never share your password with anyone else</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <br />
+            <div class="form-group">
+                <div class="text-center">
+                    @Html.ActionLink("Don't have an account? Register!", "Register", "Authentication")
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

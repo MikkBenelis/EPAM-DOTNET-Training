@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Account";
+}
+
+<div class="row">
+    <div class="col">
+        <h1 class="page-heading">@ViewBag.Title</h1>
+    </div>
+    <div class="col-sm-6">
+        <dl>
+            <dt class="col-sm-3 text-right">Account ID:</dt>
+            <dd class="col-sm-9">@Session["AccountID"]</dd>
+
+            <dt class="col-sm-3 text-right">Account owner:</dt>
+            <dd class="col-sm-9">@Session["FirstName"] @Session["LastName"]</dd>
+
+            <dt class="col-sm-3 text-right">Balance:</dt>
+            <dd class="col-sm-9">@Session["Balance"]</dd>
+
+            <dt class="col-sm-3 text-right">Account type:</dt>
+            <dd class="col-sm-9">@Session["AccountType"]</dd>
+        </dl>
+    </div>
+    <div class="col-sm-6">
+        <form method="post" action="@Url.Action("Transfer")" class="text-center">
+            <input type="hidden" value="@Session["AccountID"]" name="FromAccountID">
+            <div class="form-group">
+                <label for="account-id">AccountID</label>
+                <input type="text" class="form-control" id="account-id" placeholder="Enter account ID" name="ToAccountID">
+            </div>
+            <div class="form-group">
+                <label for="amount" class="text-center">Amount</label>
+                <input type="text" class="form-control" id="amount" placeholder="Enter amount" name="Amount">
+            </div>
+            <button type="submit" class="btn btn-primary">Transfer</button>
+        </form>
+    </div>
+</div>
