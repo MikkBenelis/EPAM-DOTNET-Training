@@ -13,6 +13,8 @@
                 return new Account
                 {
                     AccountID = accountDTO.AccountID,
+                    Login = accountDTO.Login,
+                    Password = accountDTO.Password,
                     Balance = accountDTO.Balance,
                     FirstName = accountDTO.FirstName,
                     LastName = accountDTO.LastName,
@@ -32,6 +34,8 @@
                 return new AccountDTO
                 {
                     AccountID = account.AccountID,
+                    Login = account.Login,
+                    Password = account.Password,
                     Balance = account.Balance,
                     FirstName = account.FirstName,
                     LastName = account.LastName,

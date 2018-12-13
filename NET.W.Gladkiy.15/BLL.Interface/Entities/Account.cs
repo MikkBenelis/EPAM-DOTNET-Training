@@ -7,6 +7,10 @@
     {
         public int AccountID { get; set; }
 
+        public string Login { get; set; }
+
+        public string Password { get; set; }
+
         public decimal Balance { get; set; }
 
         public string FirstName { get; set; }
@@ -24,6 +28,8 @@
         {
             return other != null &&
                    AccountID == other.AccountID &&
+                   Login == other.Login &&
+                   Password == other.Password &&
                    Balance == other.Balance &&
                    FirstName == other.FirstName &&
                    LastName == other.LastName &&
@@ -39,6 +45,8 @@
         {
             var sb = new StringBuilder();
             sb.Append($"ID={AccountID}; ");
+            sb.Append($"Login={Login}; ");
+            sb.Append($"Password={Password}; ");
             sb.Append($"Balance={Balance}; ");
             sb.Append($"FirstName={FirstName}; ");
             sb.Append($"LastName={LastName}; ");
